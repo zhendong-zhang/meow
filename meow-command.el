@@ -1581,12 +1581,23 @@ This command is a replacement for built-in `kmacro-end-macro'."
   (setq mouse-secondary-start (make-marker))
   (move-marker mouse-secondary-start (point)))
 
+(defun meow--guess-secondary-selection ()
+  (delete-overlay mouse-secondary-overlay)
+  (cond ((region-active-p)
+         (move-overlay mouse-secondary-overlay (region-beginning) (region-end)))
+        (t
+         (if-let (bounds (bounds-of-thing-at-point 'defun))
+             (move-overlay mouse-secondary-overlay (car bounds) (cdr bounds))
+           (move-overlay mouse-secondary-overlay (point-min) (point-max)))))
+  )
+
 (defun meow-grab ()
   "Create secondary selection or a marker if no region available."
   (interactive)
-  (if (region-active-p)
-      (secondary-selection-from-region)
-    (meow--cancel-second-selection))
+  (if (and (overlay-buffer mouse-secondary-overlay)
+           (not (region-active-p)))
+      (meow--cancel-second-selection)
+    (meow--guess-secondary-selection))
   (meow--cancel-selection))
 
 (defun meow-pop-grab ()
