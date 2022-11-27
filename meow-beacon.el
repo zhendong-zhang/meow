@@ -88,11 +88,9 @@ Non-nil BACKWARD means backward direction."
       (let ((m (if (meow--direction-forward-p)
                    (1- (point))
                  (1+ (point)))))
-        (meow--cancel-selection)
         (thread-first
           (meow--make-selection '(select . transient) m (point))
-          (meow--select)))
-    (meow--cancel-selection)))
+          (meow--select)))))
 
 (defun meow--beacon-apply-command (cmd)
   "Apply CMD in BEACON state."
@@ -185,8 +183,7 @@ same way, and escape ecah time the macro is applied."
                      (<= pos (line-end-position)))
                 (meow--beacon-add-overlay-at-point pos)))
             (forward-line 1))))))
-  (setq meow--beacon-overlays (reverse meow--beacon-overlays))
-  (meow--cancel-selection))
+  (setq meow--beacon-overlays (reverse meow--beacon-overlays)))
 
 (defun meow--add-beacons-for-char-expand ()
   "Add beacon for char expand movement."
@@ -323,8 +320,7 @@ MATCH is the search regexp."
           (forward-line 1)
           (back-to-indentation)
           (unless (= (point) orig)
-            (meow--beacon-add-overlay-at-point (point))))))
-    (meow--cancel-selection)))
+            (meow--beacon-add-overlay-at-point (point))))))))
 
 (defun meow--add-beacons-for-find ()
   "Add beacon for find movement."
