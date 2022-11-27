@@ -760,7 +760,7 @@ This command works similar to `meow-mark-word'."
                    (meow--forward-thing thing n))))
     (when bounds
       (thread-first
-        (meow--make-selection type (car bounds) (point) expand)
+        (meow--make-selection type (car bounds) (cdr bounds) expand)
         (meow--select))
       (meow--maybe-highlight-num-positions
        '(meow--backward-select-1 . meow--forward-select-1))
@@ -820,7 +820,7 @@ To select continuous symbols, use following approaches:
                    (meow--forward-thing thing (- n)))))
     (when bounds
       (thread-first
-        (meow--make-selection type (point) (cdr bounds) expand)
+        (meow--make-selection type (car bounds) (cdr bounds) expand)
         (meow--select))
       (meow--maybe-highlight-num-positions
        '(meow--backward-select-1 . meow--forward-select-1))
