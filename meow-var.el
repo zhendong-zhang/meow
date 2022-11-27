@@ -179,35 +179,45 @@ This option will affect the color of position hint and fake region cursor."
   :group 'meow
   :type 'boolean)
 
+(defcustom meow-text-edit-state 'normal
+  "Default state for text editing."
+  :group 'meow
+  :type '(symbol :tag "State"))
+
+(defcustom meow-special-mode-state 'motion
+  "Default state for special modes."
+  :group 'meow
+  :type '(symbol :tag "State"))
+
 (defcustom meow-mode-state-list
-  '((authinfo-mode . normal)
-    (beancount-mode . normal)
-    (bibtex-mode . normal)
-    (cider-repl-mode . normal)
-    (cider-test-report-mode . normal)
-    (cider-browse-spec-view-mode . motion)
-    (cargo-process-mode . normal)
-    (conf-mode . normal)
-    (deadgrep-edit-mode . normal)
-    (deft-mode . normal)
-    (diff-mode . normal)
-    (ediff-mode . motion)
-    (gud-mode . normal)
-    (haskell-interactive-mode . normal)
-    (help-mode . normal)
-    (json-mode . normal)
-    (jupyter-repl-mode . normal)
-    (mix-mode . normal)
-    (occur-edit-mode . normal)
-    (pass-view-mode . normal)
-    (prog-mode . normal)
-    (py-shell-mode . normal)
-    (restclient-mode . normal)
-    (telega-chat-mode . normal)
-    (term-mode . normal)
-    (text-mode . normal)
-    (vterm-mode . normal)
-    (Custom-mode . normal))
+  '((authinfo-mode . meow-text-edit-state)
+    (beancount-mode . meow-text-edit-state)
+    (bibtex-mode . meow-text-edit-state)
+    (cider-repl-mode . meow-text-edit-state)
+    (cider-test-report-mode . meow-text-edit-state)
+    (cider-browse-spec-view-mode . meow-special-mode-state)
+    (cargo-process-mode . meow-text-edit-state)
+    (conf-mode . meow-text-edit-state)
+    (deadgrep-edit-mode . meow-text-edit-state)
+    (deft-mode . meow-text-edit-state)
+    (diff-mode . meow-text-edit-state)
+    (ediff-mode . meow-special-mode-state)
+    (gud-mode . meow-text-edit-state)
+    (haskell-interactive-mode . meow-text-edit-state)
+    (help-mode . meow-text-edit-state)
+    (json-mode . meow-text-edit-state)
+    (jupyter-repl-mode . meow-text-edit-state)
+    (mix-mode . meow-text-edit-state)
+    (occur-edit-mode . meow-text-edit-state)
+    (pass-view-mode . meow-text-edit-state)
+    (prog-mode . meow-text-edit-state)
+    (py-shell-mode . meow-text-edit-state)
+    (restclient-mode . meow-text-edit-state)
+    (telega-chat-mode . meow-text-edit-state)
+    (term-mode . meow-text-edit-state)
+    (text-mode . meow-text-edit-state)
+    (vterm-mode . meow-text-edit-state)
+    (Custom-mode . meow-text-edit-state))
   "A list of rules, each is (major-mode . init-state).
 
 The init-state can be any state, including custom ones."

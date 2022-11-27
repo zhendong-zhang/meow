@@ -255,7 +255,7 @@ MODE is nil."
          (parent-mode (get mode 'derived-mode-parent))
          (state (alist-get mode meow-mode-state-list)))
     (cond
-     (state state)
+     (state (symbol-value state))
      (parent-mode (meow--mode-get-state parent-mode))
      (t (meow--mode-guess-state)))))
 
