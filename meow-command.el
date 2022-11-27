@@ -438,6 +438,15 @@ This command supports `meow-selection-command-fallback'."
     (meow--cancel-selection)
     (meow--switch-state 'insert)))
 
+(defun meow-insert-only ()
+  "Switch to INSERT state."
+  (interactive)
+  (if meow--temp-normal
+      (progn
+        (message "Quit temporary normal mode")
+        (meow--switch-state 'motion))
+    (meow--switch-state 'insert)))
+
 (defun meow-append ()
   "Move to the end of selection, switch to INSERT state."
   (interactive)

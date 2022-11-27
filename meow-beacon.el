@@ -29,6 +29,7 @@
 
 (declare-function meow-replace "meow-command")
 (declare-function meow-insert "meow-command")
+(declare-function meow-insert-only "meow-command")
 (declare-function meow-change "meow-command")
 (declare-function meow-change-char "meow-command")
 (declare-function meow-append "meow-command")
@@ -430,6 +431,18 @@ The recorded kmacro will be applied to all cursors immediately."
   (interactive)
   (meow-beacon-mode -1)
   (meow-insert)
+  (call-interactively #'kmacro-start-macro)
+  (setq-local meow--beacon-insert-enter-key last-input-event)
+  (setq meow--beacon-defining-kbd-macro 'quick))
+
+(defun meow-beacon-insert-only ()
+  "Insert and start kmacro recording.
+
+Will terminate recording when exit insert mode.
+The recorded kmacro will be applied to all cursors immediately."
+  (interactive)
+  (meow-beacon-mode -1)
+  (meow-insert-only)
   (call-interactively #'kmacro-start-macro)
   (setq-local meow--beacon-insert-enter-key last-input-event)
   (setq meow--beacon-defining-kbd-macro 'quick))

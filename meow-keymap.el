@@ -114,6 +114,7 @@
 
     ;; kmacros
     (define-key map [remap meow-insert] 'meow-beacon-insert)
+    (define-key map [remap meow-insert-only] 'meow-beacon-insert-only)
     (define-key map [remap meow-append] 'meow-beacon-append)
     (define-key map [remap meow-change] 'meow-beacon-change)
     (define-key map [remap meow-replace] 'meow-beacon-replace)
