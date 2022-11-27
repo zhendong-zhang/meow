@@ -39,6 +39,7 @@
 (declare-function meow--make-selection "meow-command")
 (declare-function meow--select "meow-command")
 (declare-function meow-beacon-mode "meow-core")
+(declare-function meow--forward-thing "meow-command")
 
 (defvar-local meow--beacon-overlays nil)
 (defvar-local meow--beacon-insert-enter-key nil)
@@ -138,6 +139,26 @@ same way, and escape ecah time the macro is applied."
   "Apply kmacros in BEACON state."
   (meow--beacon-apply-command 'kmacro-call-macro))
 
+(defun meow--add-beacons-for-thing (thing)
+  "Add beacon for thing movement."
+  (save-restriction
+    (meow--narrow-secondary-selection)
+    (let* ((orig (point))
+           (back (meow--direction-backward-p))
+           (step (if back -1 1))
+           (start-pos (if back (point-max) (point-min)))
+           (bounds))
+      (save-mark-and-excursion
+        (goto-char start-pos)
+        (while (setq bounds (meow--forward-thing thing step))
+          (unless (= (point) orig)
+            (meow--beacon-add-overlay-at-region
+             `(select . ,thing)
+             (car bounds)
+             (cdr bounds)
+             back))))))
+  (meow--beacon-shrink-selection))
+
 (defun meow--add-beacons-for-char ()
   "Add beacon for char movement."
   (save-restriction
@@ -206,27 +227,6 @@ same way, and escape ecah time the macro is applied."
                  bak)))
             (forward-line 1)))))
     (setq meow--beacon-overlays (reverse meow--beacon-overlays))))
-
-(defun meow--add-beacons-for-word ()
-  "Add beacon for word movement."
-  (save-restriction
-    (meow--narrow-secondary-selection)
-    (let ((orig (point)))
-      (if (meow--direction-forward-p)
-          ;; forward direction, add cursors at words' end
-          (progn
-            (save-mark-and-excursion
-              (goto-char (point-min))
-              (while (forward-word 1)
-                (unless (= (point) orig)
-                  (meow--beacon-add-overlay-at-point (meow--hack-cursor-pos (point)))))))
-
-        (save-mark-and-excursion
-          (goto-char (point-max))
-          (while (forward-word -1)
-            (unless (= (point) orig)
-              (meow--beacon-add-overlay-at-point (point))))))))
-  (meow--beacon-shrink-selection))
 
 (defun meow--add-beacons-for-match (match)
   "Add beacon for match(mark, visit or search).
@@ -391,15 +391,16 @@ MATCH is the search regexp."
            (type (cdr (meow--selection-type))))
       (cl-case type
         ((nil transient) (meow--add-beacons-for-char))
-        ((word) (if (not (eq 'expand ex))
-                    (meow--add-beacons-for-word)
-                  (meow--add-beacons-for-match (meow--beacon-region-words-to-match))))
         ((visit) (meow--add-beacons-for-match (car regexp-search-ring)))
         ((line) (meow--add-beacons-for-line))
         ((join) (meow--add-beacons-for-join))
         ((find) (meow--add-beacons-for-find))
         ((till) (meow--add-beacons-for-till))
-        ((char) (when (eq 'expand ex) (meow--add-beacons-for-char-expand)))))))
+        ((char) (when (eq 'expand ex) (meow--add-beacons-for-char-expand)))
+        (t (if (not (eq 'expand ex))
+               (meow--add-beacons-for-thing type)
+             (meow--add-beacons-for-match (meow--beacon-region-words-to-match))))
+        ))))
 
 (defun meow-beacon-end-and-apply-kmacro ()
   "End or apply kmacro."

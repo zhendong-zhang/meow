@@ -89,6 +89,10 @@ This will affect how selection is displayed."
 
 (defcustom meow-expand-hint-counts
   '((word . 30)
+    (symbol . 30)
+    (defun . 30)
+    (sexp . 30)
+    (number . 30)
     (line . 30)
     (block . 30)
     (find . 30)
