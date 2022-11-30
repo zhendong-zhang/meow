@@ -237,7 +237,7 @@ This function produces several items:
 (defun meow--mode-guess-state ()
   "Get initial state for current major mode.
 If any of the keys a-z are bound to self insert, then we should
-probably start in normal mode, otherwise we start in motion."
+probably start in `meow-text-edit-state' mode, otherwise we start in `meow-special-mode-state'."
   (let ((state meow--current-state))
     (meow--disable-current-state)
     (let* ((letters (split-string "abcdefghijklmnopqrstuvwxyz" "" t))
@@ -245,8 +245,8 @@ probably start in normal mode, otherwise we start in motion."
            (any-self-insert (cl-some #'meow--is-self-insertp bindings)))
       (meow--switch-state state t)
       (if any-self-insert
-          'normal
-        'motion))))
+          meow-text-edit-state
+        meow-special-mode-state))))
 
 (defun meow--mode-get-state (&optional mode)
   "Get initial state for MODE or current major mode if and only if
