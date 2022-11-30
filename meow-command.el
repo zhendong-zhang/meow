@@ -684,7 +684,7 @@ See `meow-next-line' for how prefix arguments work."
 ;;; WORD/SYMBOL MOVEMENT
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun meow-mark-thing (thing n)
+(defun meow-mark-thing (thing n &optional format-str)
   (let* ((bounds (bounds-of-thing-at-point thing))
          (beg (car bounds))
          (end (cdr bounds)))
@@ -692,7 +692,7 @@ See `meow-next-line' for how prefix arguments work."
       (thread-first
         (meow--make-selection `(expand . ,thing) beg end)
         (meow--select (< n 0)))
-      (let ((search (format "\\_<%s\\_>" (regexp-quote (buffer-substring-no-properties beg end)))))
+      (let ((search (format (or format-str "%s") (regexp-quote (buffer-substring-no-properties beg end)))))
         (meow--push-search search)
         (meow--highlight-regexp-in-buffer search)))))
 
@@ -709,14 +709,14 @@ This command will also provide highlighting for same occurs.
 
 Use negative argument to create a backward selection."
   (interactive "p")
-  (meow-mark-thing 'word n))
+  (meow-mark-thing 'word n "\\<%s\\>"))
 
 (defun meow-mark-symbol (n)
   "Mark current symbol under cursor.
 
 This command works similar to `meow-mark-word'."
   (interactive "p")
-  (meow-mark-thing 'symbol n))
+  (meow-mark-thing 'symbol n "\\_<%s\\_>"))
 
 (defun meow-mark-sexp (n)
   (interactive "p")
