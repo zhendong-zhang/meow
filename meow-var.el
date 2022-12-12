@@ -209,6 +209,7 @@ This option will affect the color of position hint and fake region cursor."
     (gud-mode . meow-text-edit-state)
     (haskell-interactive-mode . meow-text-edit-state)
     (help-mode . meow-text-edit-state)
+    (helpful-mode . meow-text-edit-state)
     (json-mode . meow-text-edit-state)
     (jupyter-repl-mode . meow-text-edit-state)
     (mix-mode . meow-text-edit-state)
